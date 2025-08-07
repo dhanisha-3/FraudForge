@@ -1,255 +1,208 @@
+import React from 'react';
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { 
-  Atom, 
   Brain, 
   Cpu, 
   Database, 
-  Lock, 
-  Cloud,
-  Zap,
-  Network
+  Shield,
+  LucideIcon
 } from "lucide-react";
-import aiBrain from "@/assets/ai-brain.jpg";
+import { motion, Variants } from "framer-motion";
+import { useInView } from "react-intersection-observer";
+import styles from "./animations/techstack.module.css";
 
-const TechStack = () => {
-  const techCategories = [
-    {
-      title: "Quantum Computing",
-      icon: Atom,
-      color: "quantum",
-      technologies: [
-        "IBM Quantum (1,000+ qubit access)",
-        "Qiskit, PennyLane, Cirq",
-        "Amazon Braket integration",
-        "Quantum-Classical Hybrid Models"
-      ]
-    },
-    {
-      title: "Classical AI/ML",
-      icon: Brain,
-      color: "neural",
-      technologies: [
-        "PyTorch, TensorFlow, JAX",
-        "XGBoost, LightGBM, CatBoost",
-        "PyTorch Geometric (GNNs)",
-        "Hugging Face Transformers"
-      ]
-    },
-    {
-      title: "Real-time Processing",
-      icon: Zap,
-      color: "warning",
-      technologies: [
-        "Apache Kafka + Flink",
-        "Redis Enterprise",
-        "NVIDIA Triton Inference Server",
-        "Apache Pulsar"
-      ]
-    },
-    {
-      title: "Privacy & Security",
-      icon: Lock,
-      color: "success",
-      technologies: [
-        "Microsoft SEAL (homomorphic encryption)",
-        "Intel SGX (secure enclaves)",
-        "Hyperledger Fabric",
-        "Zero-knowledge proofs (ZK-SNARKs)"
-      ]
-    },
-    {
-      title: "Edge Computing",
-      icon: Cpu,
-      color: "accent",
-      technologies: [
-        "NVIDIA Jetson (edge deployment)",
-        "TensorRT optimization",
-        "ONNX cross-platform",
-        "WebAssembly (browser)"
-      ]
-    },
-    {
-      title: "Cloud Infrastructure",
-      icon: Cloud,
-      color: "secondary",
-      technologies: [
-        "Kubernetes orchestration",
-        "Istio service mesh",
-        "Prometheus monitoring",
-        "Multi-cloud deployment"
-      ]
-    }
-  ];
+interface TechCategory {
+  icon: LucideIcon;
+  title: string;
+  technologies: string[];
+}
 
-  const architectureFeatures = [
-    {
-      title: "Quantum Advantage",
-      description: "15% accuracy boost over classical-only systems",
-      percentage: 115
-    },
-    {
-      title: "Neural Networks",
-      description: "800+ behavioral features analyzed",
-      percentage: 100
-    },
-    {
-      title: "Graph Intelligence",
-      description: "4D temporal hypergraph updates every 100ms",
-      percentage: 95
-    },
-    {
-      title: "Privacy Preservation",
-      description: "Zero-knowledge proofs with ε=0.1 differential privacy",
-      percentage: 100
+const techCategories: TechCategory[] = [
+  {
+    icon: Shield,
+    title: "Quantum Security",
+    technologies: ["Quantum Encryption", "Post-Quantum Cryptography", "Quantum Key Distribution"]
+  },
+  {
+    icon: Brain,
+    title: "AI & ML",
+    technologies: ["Neural Networks", "Deep Learning", "Pattern Recognition", "Anomaly Detection"]
+  },
+  {
+    icon: Cpu,
+    title: "Processing",
+    technologies: ["Real-time Analysis", "Distributed Computing", "Edge Processing"]
+  },
+  {
+    icon: Database,
+    title: "Data Systems",
+    technologies: ["Quantum Database", "Blockchain", "Secure Storage", "Data Lakes"]
+  }
+];
+
+const stagger: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
     }
-  ];
+  }
+};
+
+const fadeInUp: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 20
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: [0.6, -0.05, 0.01, 0.99]
+    }
+  }
+};
+
+export const TechStack: React.FC = () => {
+  const { ref, inView } = useInView({
+    threshold: 0.1,
+    triggerOnce: true
+  });
 
   return (
-    <section className="py-24 bg-background">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-16">
-          <Badge variant="neural" className="mb-4">
-            Technical Excellence
+    <section className={styles.techSection} ref={ref}>
+      <motion.div
+        className="container mx-auto px-4"
+        initial="hidden"
+        animate={inView ? "visible" : "hidden"}
+        variants={stagger}
+      >
+        <motion.div 
+          className="text-center mb-16"
+          variants={fadeInUp}
+        >
+          <Badge variant="outline" className="mb-4">
+            Advanced Technology Stack
           </Badge>
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            <span className="bg-gradient-hero bg-clip-text text-transparent">Multi-Modal AI</span> Technology Stack
+          <h2 className="text-4xl font-bold mb-4">
+            Powered by Cutting-Edge Technology
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Advanced behavioral biometrics and contextual intelligence powered by ensemble learning architecture
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Our system combines quantum computing, advanced AI, and real-time processing
+            to deliver unparalleled fraud detection capabilities.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
-          {/* Technology Categories */}
-          <div className="space-y-6">
-            <h3 className="text-2xl font-bold mb-6">Core Technologies</h3>
-            {techCategories.map((category, index) => {
-              const IconComponent = category.icon;
-              return (
-                <Card key={index} className="p-6 bg-card/80 backdrop-blur-sm border-primary/20 hover:border-primary/40 transition-all duration-300 hover:shadow-glow group">
-                  <div className="flex items-start space-x-4">
-                    <div className={`w-12 h-12 rounded-lg bg-gradient-${category.color} flex items-center justify-center shadow-neural group-hover:scale-110 transition-transform duration-300`}>
-                      <IconComponent className="w-6 h-6 text-white" />
+        <motion.div 
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+          variants={stagger}
+        >
+          {techCategories.map((category, index) => (
+            <motion.div
+              key={index}
+              variants={fadeInUp}
+              className={styles.techCard}
+            >
+              <Card className="h-full">
+                <div className="p-6">
+                  <div className={styles.iconWrapper}>
+                    <category.icon className="w-6 h-6 text-primary" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-4">{category.title}</h3>
+                  <div className="space-y-2">
+                    {category.technologies.map((tech, idx) => (
+                      <motion.div
+                        key={idx}
+                        className={styles.techItem}
+                        variants={fadeInUp}
+                        custom={idx}
+                      >
+                        {tech}
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+              </Card>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        <motion.div 
+          className="grid md:grid-cols-2 gap-8 mt-16"
+          variants={stagger}
+        >
+          <motion.div variants={fadeInUp}>
+            <Card>
+              <div className="p-6">
+                <h3 className="text-xl font-semibold mb-4">System Architecture</h3>
+                <div className="space-y-4">
+                  {[
+                    { name: "Quantum Processing", value: 99.94 },
+                    { name: "Neural Networks", value: 98.5 },
+                    { name: "Real-time Analysis", value: 99.1 },
+                    { name: "Behavioral Patterns", value: 97.8 }
+                  ].map((stat, idx) => (
+                    <div key={idx} className="space-y-2">
+                      <div className="flex justify-between">
+                        <span className="text-sm font-medium">{stat.name}</span>
+                        <span className="text-sm text-primary">{stat.value}%</span>
+                      </div>
+                      <motion.div 
+                        className="h-2 bg-secondary/10 rounded-full overflow-hidden"
+                        initial={{ width: 0 }}
+                        animate={{ width: "100%" }}
+                        transition={{ duration: 0.8, delay: idx * 0.2 }}
+                      >
+                        <div 
+                          className="h-full bg-primary rounded-full" 
+                          style={{ width: `${stat.value}%` }}
+                        />
+                      </motion.div>
                     </div>
-                    <div className="flex-1">
-                      <h4 className="text-lg font-semibold mb-3 group-hover:text-primary transition-colors">
-                        {category.title}
-                      </h4>
-                      <div className="space-y-2">
-                        {category.technologies.map((tech, techIndex) => (
-                          <div key={techIndex} className="flex items-center space-x-2">
-                            <div className="w-1.5 h-1.5 rounded-full bg-accent" />
-                            <span className="text-sm text-muted-foreground">{tech}</span>
-                          </div>
-                        ))}
+                  ))}
+                </div>
+              </div>
+            </Card>
+          </motion.div>
+
+          <motion.div variants={fadeInUp}>
+            <Card>
+              <div className="p-6">
+                <h3 className="text-xl font-semibold mb-4">Development Timeline</h3>
+                <div className="space-y-6">
+                  {[
+                    { phase: "Research", duration: "2 weeks", status: "Completed" },
+                    { phase: "Development", duration: "6 weeks", status: "Completed" },
+                    { phase: "Testing", duration: "4 weeks", status: "In Progress" },
+                    { phase: "Deployment", duration: "2 weeks", status: "Upcoming" }
+                  ].map((phase, idx) => (
+                    <div key={idx} className="flex items-center space-x-4">
+                      <div className="w-2 h-2 rounded-full bg-primary" />
+                      <div className="flex-1">
+                        <div className="flex justify-between items-center">
+                          <span className="font-medium">{phase.phase}</span>
+                          <Badge variant="outline" className="text-xs">
+                            {phase.duration}
+                          </Badge>
+                        </div>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          {phase.status}
+                        </p>
                       </div>
                     </div>
-                  </div>
-                </Card>
-              );
-            })}
-          </div>
-
-          {/* Architecture Visualization */}
-          <div className="space-y-6">
-            <h3 className="text-2xl font-bold mb-6">Architecture Features</h3>
-            <Card className="p-6 bg-card/80 backdrop-blur-sm border-primary/20 overflow-hidden">
-              <div 
-                className="w-full h-64 bg-cover bg-center rounded-lg mb-6"
-                style={{ backgroundImage: `url(${aiBrain})` }}
-              >
-                <div className="w-full h-full bg-gradient-quantum/20 rounded-lg flex items-center justify-center">
-                  <div className="text-center">
-                    <Network className="w-16 h-16 mx-auto mb-4 text-white drop-shadow-lg" />
-                    <h4 className="text-xl font-bold text-white drop-shadow-lg">
-                      Multi-Modal AI Brain
-                    </h4>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="space-y-4">
-                {architectureFeatures.map((feature, index) => (
-                  <div key={index} className="space-y-2">
-                    <div className="flex justify-between items-center">
-                      <span className="font-medium">{feature.title}</span>
-                      <span className="text-sm text-accent">{feature.percentage}%</span>
-                    </div>
-                    <div className="w-full bg-muted rounded-full h-2">
-                      <div 
-                        className="bg-gradient-quantum h-2 rounded-full transition-all duration-1000 ease-out"
-                        style={{ width: `${feature.percentage}%` }}
-                      />
-                    </div>
-                    <p className="text-xs text-muted-foreground">{feature.description}</p>
-                  </div>
-                ))}
-              </div>
-            </Card>
-
-            {/* Development Timeline */}
-            <Card className="p-6 bg-card/80 backdrop-blur-sm border-primary/20">
-              <h4 className="text-lg font-semibold mb-4">48-Hour Sprint Timeline</h4>
-              <div className="space-y-3">
-                <div className="flex items-center space-x-3">
-                  <div className="w-2 h-2 rounded-full bg-success" />
-                  <span className="text-sm">Hour 0-4: Architecture setup + data pipeline</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <div className="w-2 h-2 rounded-full bg-primary" />
-                  <span className="text-sm">Hour 4-12: Quantum-classical model training</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <div className="w-2 h-2 rounded-full bg-secondary" />
-                  <span className="text-sm">Hour 12-20: Graph neural network + behavioral biometrics</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <div className="w-2 h-2 rounded-full bg-accent" />
-                  <span className="text-sm">Hour 20-28: Dashboard development + XAI integration</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <div className="w-2 h-2 rounded-full bg-warning" />
-                  <span className="text-sm">Hour 28-36: System integration + optimization</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <div className="w-2 h-2 rounded-full bg-destructive" />
-                  <span className="text-sm">Hour 36-48: Demo preparation + final polish</span>
+                  ))}
                 </div>
               </div>
             </Card>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
+      </motion.div>
 
-        {/* Innovation Highlights */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card className="p-6 bg-gradient-quantum/10 backdrop-blur-sm border-primary/30 text-center">
-            <Atom className="w-12 h-12 mx-auto mb-4 text-primary" />
-            <h4 className="text-lg font-semibold mb-2">Quantum Supremacy</h4>
-            <p className="text-sm text-muted-foreground">
-              First production deployment of quantum fraud detection with provable quantum advantage
-            </p>
-          </Card>
-          
-          <Card className="p-6 bg-gradient-neural/10 backdrop-blur-sm border-secondary/30 text-center">
-            <Brain className="w-12 h-12 mx-auto mb-4 text-secondary" />
-            <h4 className="text-lg font-semibold mb-2">Neural Excellence</h4>
-            <p className="text-sm text-muted-foreground">
-              Advanced graph neural networks with temporal dynamics and behavioral biometrics
-            </p>
-          </Card>
-          
-          <Card className="p-6 bg-gradient-success/10 backdrop-blur-sm border-success/30 text-center">
-            <Lock className="w-12 h-12 mx-auto mb-4 text-success" />
-            <h4 className="text-lg font-semibold mb-2">Privacy First</h4>
-            <p className="text-sm text-muted-foreground">
-              Zero-knowledge proofs and homomorphic encryption ensure complete data privacy
-            </p>
-          </Card>
-        </div>
-      </div>
+      <div className={styles.backgroundGlow} style={{ left: '10%', top: '20%' }} />
+      <div className={styles.backgroundGlow} style={{ right: '10%', bottom: '20%' }} />
     </section>
   );
 };
-
-export default TechStack;

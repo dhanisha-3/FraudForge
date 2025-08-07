@@ -1,0 +1,155 @@
+@keyframes progress {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.progressBar {
+  position: relative;
+  overflow: hidden;
+  height: 4px;
+  background: rgba(var(--primary-rgb), 0.1);
+  border-radius: 2px;
+}
+
+.progressBarInner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    hsl(var(--primary)),
+    transparent
+  );
+  animation: progress 2s ease-in-out infinite;
+  width: 50%;
+}
+
+.container {
+  display: grid;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+@media (min-width: 768px) {
+  .container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.card {
+  background: rgba(var(--card-rgb), 0.02);
+  backdrop-filter: blur(12px);
+  border-radius: var(--radius);
+  padding: 2rem;
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  background: rgba(var(--card-rgb), 0.05);
+}
+
+.dataPoint {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(var(--card-rgb), 0.05);
+  border-radius: var(--radius);
+  margin-bottom: 1rem;
+}
+
+.dataPoint:hover {
+  background: rgba(var(--card-rgb), 0.1);
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: rgba(var(--primary-rgb), 0.1);
+}
+
+.safe {
+  color: hsl(var(--success));
+}
+
+.warning {
+  color: hsl(var(--warning));
+}
+
+.danger {
+  color: hsl(var(--destructive));
+}
+
+.score {
+  font-size: 2rem;
+  font-weight: bold;
+  line-height: 1;
+  margin: 1rem 0;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  gap: 0.5rem;
+}
+
+.safeBadge {
+  background: rgba(var(--success-rgb), 0.1);
+  color: hsl(var(--success));
+}
+
+.warningBadge {
+  background: rgba(var(--warning-rgb), 0.1);
+  color: hsl(var(--warning));
+}
+
+.dangerBadge {
+  background: rgba(var(--destructive-rgb), 0.1);
+  color: hsl(var(--destructive));
+}
+
+.analyticsSummary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.summaryItem {
+  text-align: center;
+  padding: 1rem;
+  background: rgba(var(--card-rgb), 0.05);
+  border-radius: var(--radius);
+}
+
+.summaryItem:hover {
+  background: rgba(var(--card-rgb), 0.1);
+}
+
+.summaryValue {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: hsl(var(--primary));
+}
+
+.summaryLabel {
+  font-size: 0.875rem;
+  color: hsl(var(--muted-foreground));
+  margin-top: 0.25rem;
+}

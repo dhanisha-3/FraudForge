@@ -76,6 +76,63 @@ export default {
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)'
 			},
+			animation: {
+				'float': 'float 3s ease-in-out infinite',
+				'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
+				'gradient-shift': 'gradient-shift 4s ease infinite',
+				'matrix-rain': 'matrix-rain 3s linear infinite',
+				'data-flow': 'data-flow 2s linear infinite',
+				'neural-pulse': 'neural-pulse 1.5s ease-in-out infinite',
+				'hologram': 'hologram-flicker 0.1s ease-in-out infinite',
+				'spin-slow': 'spin 3s linear infinite',
+				'bounce-slow': 'bounce 2s infinite',
+			},
+			keyframes: {
+				'float': {
+					'0%, 100%': { transform: 'translateY(0px)' },
+					'50%': { transform: 'translateY(-10px)' },
+				},
+				'pulse-glow': {
+					'0%, 100%': {
+						boxShadow: '0 0 20px rgba(var(--primary-rgb), 0.3)',
+						transform: 'scale(1)'
+					},
+					'50%': {
+						boxShadow: '0 0 40px rgba(var(--primary-rgb), 0.6)',
+						transform: 'scale(1.02)'
+					},
+				},
+				'gradient-shift': {
+					'0%': { backgroundPosition: '0% 50%' },
+					'50%': { backgroundPosition: '100% 50%' },
+					'100%': { backgroundPosition: '0% 50%' },
+				},
+				'matrix-rain': {
+					'0%': { transform: 'translateY(-100vh)', opacity: '0' },
+					'10%': { opacity: '1' },
+					'90%': { opacity: '1' },
+					'100%': { transform: 'translateY(100vh)', opacity: '0' },
+				},
+				'data-flow': {
+					'0%': { transform: 'translateX(-100%)' },
+					'100%': { transform: 'translateX(100%)' },
+				},
+				'neural-pulse': {
+					'0%, 100%': { opacity: '0.3', transform: 'scale(1)' },
+					'50%': { opacity: '1', transform: 'scale(1.1)' },
+				},
+				'hologram-flicker': {
+					'0%, 100%': { opacity: '1' },
+					'50%': { opacity: '0.8' },
+					'75%': { opacity: '0.9' },
+				},
+			},
+			backgroundImage: {
+				'gradient-quantum': 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)))',
+				'gradient-neural': 'linear-gradient(135deg, hsl(var(--secondary)), hsl(var(--accent)))',
+				'gradient-cyber': 'linear-gradient(135deg, hsl(var(--accent)), hsl(var(--primary)))',
+				'gradient-hero': 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)), hsl(var(--accent)))',
+			},
 			backgroundImage: {
 				'gradient-quantum': 'var(--gradient-quantum)',
 				'gradient-neural': 'var(--gradient-neural)',

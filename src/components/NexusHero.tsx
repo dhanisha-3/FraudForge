@@ -116,30 +116,5 @@ const NexusHero = () => {
     </section>
   );
 };
-          </div>
-        </div>
-
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-          <Button variant="hero" size="hero" className="shadow-glow">
-            Launch Live Demo
-          </Button>
-          <Button variant="outline" size="lg" className="bg-card/50 backdrop-blur-sm border-primary/30 hover:bg-primary/10">
-            View Architecture
-          </Button>
-        </div>
-
-        <div className="mt-12 text-sm text-muted-foreground">
-          <p>Revolutionary Achievement: <span className="text-accent font-medium">99.7% accuracy</span> • 
-          <span className="text-secondary font-medium"> 85% false positive reduction</span> • 
-          <span className="text-warning font-medium"> Unforgeable behavioral fingerprints</span></p>
-        </div>
-      </div>
-
-      {/* Animated Gradient Orbs */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-quantum opacity-20 rounded-full blur-3xl animate-pulse" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gradient-neural opacity-20 rounded-full blur-3xl animate-pulse delay-1000" />
-    </section>
-  );
-};
 
 export default NexusHero;

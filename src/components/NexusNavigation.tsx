@@ -22,18 +22,27 @@ const NexusNavigation = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            <a href="#features" className="text-foreground hover:text-primary transition-colors">
-              Features
+          <div className="hidden lg:flex items-center space-x-6">
+            <a href="#demo" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
+              Demo
             </a>
-            <a href="#architecture" className="text-foreground hover:text-primary transition-colors">
-              Architecture
+            <a href="#biometrics" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
+              Biometrics
             </a>
-            <a href="#demo" className="text-foreground hover:text-primary transition-colors">
-              Live Demo
+            <a href="#voice" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
+              Voice AI
             </a>
-            <a href="#performance" className="text-foreground hover:text-primary transition-colors">
-              Performance
+            <a href="#network" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
+              Network
+            </a>
+            <a href="#credit-card" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
+              Cards
+            </a>
+            <a href="#upi" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
+              UPI
+            </a>
+            <a href="#safezone" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
+              SafeZone
             </a>
             <Button variant="quantum" size="sm">
               Get Access
