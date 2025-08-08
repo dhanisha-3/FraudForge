@@ -909,20 +909,5 @@ We're building the future of fraud detection, and we want you to be part of it!
 - **Memory Usage**: <2GB per model
 - **Documentation**: Complete algorithm explanation
 
-## 🌟 Community & Support
 
-### **Join Our Revolutionary Community**
-
-- **💬 Discord**: [Join 5,000+ developers](https://discord.gg/fraudforge)
-- **📧 Email**: support@fraudforge.ai
-- **🐦 Twitter**: [@FraudForgeAI](https://twitter.com/fraudforgeai)
-- **📚 Documentation**: [docs.fraudforge.ai](https://docs.fraudforge.ai)
-- **🎥 YouTube**: [FraudForge Channel](https://youtube.com/fraudforge)
-
-### **Getting Help**
-
-- **🚨 Bug Reports**: Use GitHub Issues with detailed reproduction steps
-- **💡 Feature Requests**: Community voting on new features
-- **❓ Questions**: Stack Overflow tag `fraudforge`
-- **📞 Enterprise Support**: 24/7 support for enterprise customers
 
