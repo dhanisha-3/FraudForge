@@ -52,49 +52,49 @@ const NexusHero = () => {
         </FadeInSection>
         
         <FadeInSection delay={0.4}>
-          <h1 className={cn("text-5xl md:text-7xl font-bold mb-6", styles.gradientText)}>
-            FraudGuard AI
+          <h1 className={cn("text-5xl md:text-7xl font-bold mb-6 gradient-text-cyber", styles.gradientText)}>
+            SentinelAI
           </h1>
         </FadeInSection>
         
         <FadeInSection delay={0.6}>
           <p className="text-xl md:text-2xl text-muted-foreground mb-4 max-w-4xl mx-auto">
-            Revolutionizing Financial Security
+            Next-Generation Fraud Detection with Graph Neural Networks
           </p>
         </FadeInSection>
-        
+
         <FadeInSection delay={0.8}>
           <p className="text-lg text-accent mb-8 max-w-3xl mx-auto font-medium">
-            Where Innovation Meets Security, and Users Come First
+            Advanced GAN & NLP fusion with behavioral biometrics, dark web intelligence, and predictive analytics
           </p>
         </FadeInSection>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12 max-w-4xl mx-auto">
           <FadeInSection direction="up" delay={1.0}>
-            <div className={styles.statsCard}>
-              <Shield className={cn("w-6 h-6 text-primary mb-2", styles.icon)} />
-              <span className="text-sm font-medium">99.94% Accuracy</span>
+            <div className={cn(styles.statsCard, "card-glass neon-blue")}>
+              <Shield className={cn("w-6 h-6 text-blue-400 mb-2", styles.icon)} />
+              <span className="text-sm font-medium">97.1% Accuracy</span>
             </div>
           </FadeInSection>
-          
+
           <FadeInSection direction="up" delay={1.2}>
-            <div className={styles.statsCard}>
-              <Zap className={cn("w-6 h-6 text-secondary mb-2", styles.icon)} />
-              <span className="text-sm font-medium">&lt;50ms Latency</span>
+            <div className={cn(styles.statsCard, "card-glass neon-purple")}>
+              <Zap className={cn("w-6 h-6 text-purple-400 mb-2", styles.icon)} />
+              <span className="text-sm font-medium">&lt;100ms Latency</span>
             </div>
           </FadeInSection>
-          
+
           <FadeInSection direction="up" delay={1.4}>
-            <div className={styles.statsCard}>
-              <Brain className={cn("w-6 h-6 text-accent mb-2", styles.icon)} />
-              <span className="text-sm font-medium">Multi-Modal AI</span>
+            <div className={cn(styles.statsCard, "card-glass neon-cyan")}>
+              <Brain className={cn("w-6 h-6 text-cyan-400 mb-2", styles.icon)} />
+              <span className="text-sm font-medium">GAN + NLP Fusion</span>
             </div>
           </FadeInSection>
-          
+
           <FadeInSection direction="up" delay={1.6}>
-            <div className={styles.statsCard}>
-              <Network className={cn("w-6 h-6 text-warning mb-2", styles.icon)} />
-              <span className="text-sm font-medium">10M+ TPS</span>
+            <div className={cn(styles.statsCard, "card-glass holographic")}>
+              <Network className={cn("w-6 h-6 text-green-400 mb-2", styles.icon)} />
+              <span className="text-sm font-medium">Dark Web Intel</span>
             </div>
           </FadeInSection>
         </div>

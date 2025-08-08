@@ -1,0 +1,274 @@
+﻿import React, { useState } from 'react';
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import {
+  Menu,
+  Home,
+  Shield,
+  Eye,
+  Brain,
+  Activity,
+  BarChart3,
+  Settings,
+  Link2,
+  AlertTriangle,
+  Key,
+  CreditCard,
+  AlertOctagon,
+  Fingerprint,
+  GraduationCap,
+  Globe,
+  X
+} from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+
+interface NavItem {
+  label: string;
+  href: string;
+  icon: React.ElementType;
+  description: string;
+  badge?: string;
+}
+
+interface NavGroup {
+  label: string;
+  items: NavItem[];
+}
+
+const navGroups: NavGroup[] = [
+  {
+    label: "Overview",
+    items: [
+      {
+        label: "Home",
+        href: "/",
+        icon: Home,
+        description: "Dashboard overview"
+      }
+    ]
+  },
+  {
+    label: "Core Security",
+    items: [
+      {
+        label: "Account Protection",
+        href: "/account-protection",
+        icon: Shield,
+        description: "Advanced account security",
+        badge: "Essential"
+      },
+  {
+    label: "Digital ID",
+    href: "/digital-id",
+    icon: Fingerprint,
+    description: "Digital identity management"
+  },
+  {
+    label: "Transactions",
+    href: "/transactions",
+    icon: Activity,
+    description: "Transaction monitoring"
+  },
+  {
+    label: "Analytics",
+    href: "/analytics",
+    icon: BarChart3,
+    description: "Advanced analytics"
+  },
+  {
+    label: "Security",
+    href: "/security",
+    icon: Shield,
+    description: "Security management"
+  },
+  {
+    label: "AI Models",
+    href: "/ai-models",
+    icon: Brain,
+    description: "AI/ML models"
+  },
+  {
+    label: "Computer Vision",
+    href: "/computer-vision",
+    icon: Eye,
+    description: "Computer vision analysis",
+    badge: "New"
+  },
+  {
+    label: "Education",
+    href: "/education",
+    icon: GraduationCap,
+    description: "Fraud education center"
+  },
+  {
+    label: "Geospatial",
+    href: "/geospatial",
+    icon: Globe,
+    description: "Geospatial fraud detection"
+  },
+  {
+    label: "Settings",
+    href: "/settings",
+    icon: Settings,
+    description: "System settings"
+  },
+  {
+    label: "Threat Intelligence",
+    href: "/threat-intelligence",
+    icon: AlertTriangle,
+    description: "Threat intelligence fusion"
+  },
+  {
+    label: "URL Scanner",
+    href: "/url-scanner",
+    icon: Link2,
+    description: "URL fraud detection"
+  },
+  {
+    label: "Spam Detection",
+    href: "/spam-detection",
+    icon: AlertOctagon,
+    description: "AI spam detection"
+  },
+  {
+    label: "OTP Fraud",
+    href: "/otp-fraud",
+    icon: Key,
+    description: "OTP fraud detection"
+  },
+  {
+    label: "Credit Card",
+    href: "/credit-card",
+    icon: CreditCard,
+    description: "Credit card fraud"
+  },
+  {
+    label: "Phishing",
+    href: "/phishing",
+    icon: AlertOctagon,
+    description: "Phishing detection"
+  }
+];
+
+const NexusNavigation = () => {
+  const [open, setOpen] = useState(false);
+  const location = useLocation();
+
+  return (
+    <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container flex h-14 items-center">
+        <div className="mr-4 hidden md:flex">
+          <Link 
+            to="/" 
+            className="mr-6 flex items-center space-x-2"
+          >
+            <Shield className="h-6 w-6" />
+            <span className="hidden font-bold sm:inline-block">
+              FraudGuard AI
+            </span>
+            <Badge variant="outline" className="ml-2">
+              Multi-Modal
+            </Badge>
+          </Link>
+          <div className="flex gap-4 items-center">
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                to={item.href}
+                className={cn(
+                  "flex items-center text-sm font-medium transition-colors hover:text-primary",
+                  location.pathname === item.href
+                    ? "text-primary"
+                    : "text-muted-foreground"
+                )}
+              >
+                {item.label}
+                {item.badge && (
+                  <Badge variant="outline" className="ml-2">
+                    {item.badge}
+                  </Badge>
+                )}
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        <Sheet open={open} onOpenChange={setOpen}>
+          <SheetTrigger asChild>
+            <Button
+              variant="ghost"
+              className="mr-2 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
+            >
+              <Menu className="h-6 w-6" />
+              <span className="sr-only">Toggle Menu</span>
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" className="pr-0">
+            <SheetHeader>
+              <SheetTitle className="flex items-center">
+                <Shield className="h-6 w-6 mr-2" />
+                FraudGuard AI
+                <Badge variant="outline" className="ml-2">
+                  Multi-Modal
+                </Badge>
+              </SheetTitle>
+            </SheetHeader>
+            <div className="flex flex-col space-y-3 mt-4">
+              {navItems.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <Link
+                    key={item.href}
+                    to={item.href}
+                    onClick={() => setOpen(false)}
+                    className={cn(
+                      "flex items-center text-sm font-medium transition-colors hover:text-primary p-2 rounded-md",
+                      location.pathname === item.href
+                        ? "bg-muted text-primary"
+                        : "text-muted-foreground"
+                    )}
+                  >
+                    <Icon className="h-4 w-4 mr-2" />
+                    <div className="flex-1">
+                      <div className="flex items-center">
+                        {item.label}
+                        {item.badge && (
+                          <Badge variant="outline" className="ml-2">
+                            {item.badge}
+                          </Badge>
+                        )}
+                      </div>
+                      <p className="text-xs text-muted-foreground line-clamp-1">
+                        {item.description}
+                      </p>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </SheetContent>
+        </Sheet>
+
+        <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
+          <div className="w-full flex-1 md:w-auto md:flex-none">
+            {/* Add search or other utility components here */}
+          </div>
+          <Button variant="outline" size="sm">
+            Sign In
+          </Button>
+          <Button size="sm">Get Started</Button>
+        </div>
+      </div>
+    </nav>
+  );
+};
+
+export default NexusNavigation;

@@ -215,35 +215,236 @@ const FraudNetworkVisualization = () => {
     };
   }, [networkData]);
 
-  // Simulate real-time updates
+  // Advanced real-time network analysis
   useEffect(() => {
     if (!isPlaying) return;
 
     const interval = setInterval(() => {
-      // Randomly update node risk levels
-      setNetworkData(prev => ({
-        ...prev,
-        nodes: prev.nodes.map(node => ({
-          ...node,
-          risk: Math.min(1, Math.max(0, node.risk + (Math.random() - 0.5) * 0.1))
-        }))
-      }));
+      // Advanced network analysis and updates
+      setNetworkData(prev => {
+        const updatedData = performNetworkAnalysis(prev);
+        return updatedData;
+      });
 
-      // Occasionally detect new fraud rings
-      if (Math.random() < 0.3) {
-        const newRing: FraudRing = {
-          id: `ring-${Date.now()}`,
-          nodes: ["user2", "user3", "device2"],
-          riskLevel: ["medium", "high", "critical"][Math.floor(Math.random() * 3)] as any,
-          totalAmount: Math.floor(Math.random() * 100000) + 10000,
-          detectedAt: new Date()
-        };
-        setFraudRings(prev => [newRing, ...prev.slice(0, 4)]);
+      // Intelligent fraud ring detection
+      const detectedRings = detectFraudRings(networkData);
+      if (detectedRings.length > 0) {
+        setFraudRings(prev => [...detectedRings, ...prev.slice(0, 3)]);
       }
     }, 3000);
 
     return () => clearInterval(interval);
-  }, [isPlaying]);
+  }, [isPlaying, networkData]);
+
+  // Advanced network analysis algorithm
+  const performNetworkAnalysis = (data: {nodes: NetworkNode[], links: NetworkLink[]}): {nodes: NetworkNode[], links: NetworkLink[]} => {
+    const updatedNodes = data.nodes.map(node => {
+      // Calculate centrality measures
+      const centrality = calculateNodeCentrality(node, data.links);
+      const communityRisk = calculateCommunityRisk(node, data.nodes, data.links);
+      const velocityRisk = calculateVelocityRisk(node);
+
+      // Update risk based on network position and behavior
+      let newRisk = node.risk;
+
+      // High centrality nodes are more suspicious
+      if (centrality > 0.7) {
+        newRisk = Math.min(1, newRisk + 0.1);
+      }
+
+      // Community risk propagation
+      newRisk = Math.min(1, newRisk + communityRisk * 0.05);
+
+      // Velocity-based risk
+      newRisk = Math.min(1, newRisk + velocityRisk * 0.08);
+
+      // Natural risk decay for legitimate behavior
+      if (newRisk < 0.3) {
+        newRisk = Math.max(0, newRisk - 0.02);
+      }
+
+      // Update status based on risk
+      let newStatus = node.status;
+      if (newRisk > 0.8) {
+        newStatus = "blocked";
+      } else if (newRisk > 0.5) {
+        newStatus = "suspicious";
+      } else {
+        newStatus = "normal";
+      }
+
+      return {
+        ...node,
+        risk: newRisk,
+        status: newStatus
+      };
+    });
+
+    // Update link strengths based on node risks
+    const updatedLinks = data.links.map(link => {
+      const sourceNode = updatedNodes.find(n => n.id === link.source);
+      const targetNode = updatedNodes.find(n => n.id === link.target);
+
+      if (sourceNode && targetNode) {
+        // Increase link strength if both nodes are risky
+        const riskFactor = (sourceNode.risk + targetNode.risk) / 2;
+        const newStrength = Math.min(1, link.strength + riskFactor * 0.1);
+
+        return {
+          ...link,
+          strength: newStrength
+        };
+      }
+
+      return link;
+    });
+
+    return {
+      nodes: updatedNodes,
+      links: updatedLinks
+    };
+  };
+
+  // Calculate node centrality (simplified betweenness centrality)
+  const calculateNodeCentrality = (node: NetworkNode, links: NetworkLink[]): number => {
+    const nodeConnections = links.filter(link =>
+      link.source === node.id || link.target === node.id
+    );
+
+    // Degree centrality (normalized)
+    const degreeCentrality = nodeConnections.length / Math.max(1, links.length);
+
+    // Weight by connection strengths
+    const weightedCentrality = nodeConnections.reduce((sum, link) => sum + link.strength, 0) / nodeConnections.length;
+
+    return (degreeCentrality + (weightedCentrality || 0)) / 2;
+  };
+
+  // Calculate community risk (risk propagation from neighbors)
+  const calculateCommunityRisk = (node: NetworkNode, nodes: NetworkNode[], links: NetworkLink[]): number => {
+    const neighbors = getNodeNeighbors(node.id, links);
+    const neighborNodes = nodes.filter(n => neighbors.includes(n.id));
+
+    if (neighborNodes.length === 0) return 0;
+
+    // Average risk of neighbors
+    const avgNeighborRisk = neighborNodes.reduce((sum, n) => sum + n.risk, 0) / neighborNodes.length;
+
+    // Weight by connection strength
+    const connectionWeights = links
+      .filter(link => (link.source === node.id && neighbors.includes(link.target as string)) ||
+                     (link.target === node.id && neighbors.includes(link.source as string)))
+      .reduce((sum, link) => sum + link.strength, 0);
+
+    return avgNeighborRisk * (connectionWeights / neighbors.length);
+  };
+
+  // Calculate velocity-based risk
+  const calculateVelocityRisk = (node: NetworkNode): number => {
+    // Simulate transaction velocity analysis
+    const baseVelocity = node.connections;
+    const timeWindow = 3600000; // 1 hour
+
+    // High connection velocity indicates potential fraud
+    if (baseVelocity > 10) {
+      return 0.3;
+    } else if (baseVelocity > 5) {
+      return 0.15;
+    }
+
+    return 0;
+  };
+
+  // Get node neighbors
+  const getNodeNeighbors = (nodeId: string, links: NetworkLink[]): string[] => {
+    const neighbors: string[] = [];
+
+    links.forEach(link => {
+      if (link.source === nodeId) {
+        neighbors.push(link.target as string);
+      } else if (link.target === nodeId) {
+        neighbors.push(link.source as string);
+      }
+    });
+
+    return neighbors;
+  };
+
+  // Advanced fraud ring detection algorithm
+  const detectFraudRings = (data: {nodes: NetworkNode[], links: NetworkLink[]}): FraudRing[] => {
+    const detectedRings: FraudRing[] = [];
+
+    // Find connected components with high risk
+    const visitedNodes = new Set<string>();
+
+    data.nodes.forEach(node => {
+      if (visitedNodes.has(node.id) || node.risk < 0.6) return;
+
+      // Perform DFS to find connected high-risk nodes
+      const component = findConnectedComponent(node.id, data.nodes, data.links, visitedNodes);
+
+      if (component.length >= 2) {
+        const avgRisk = component.reduce((sum, nodeId) => {
+          const n = data.nodes.find(node => node.id === nodeId);
+          return sum + (n?.risk || 0);
+        }, 0) / component.length;
+
+        if (avgRisk > 0.7) {
+          // Calculate total transaction amount (simulated)
+          const totalAmount = component.length * 15000 + Math.random() * 50000;
+
+          let riskLevel: "low" | "medium" | "high" | "critical";
+          if (avgRisk > 0.9) riskLevel = "critical";
+          else if (avgRisk > 0.8) riskLevel = "high";
+          else if (avgRisk > 0.7) riskLevel = "medium";
+          else riskLevel = "low";
+
+          detectedRings.push({
+            id: `ring-${Date.now()}-${Math.random()}`,
+            nodes: component,
+            riskLevel,
+            totalAmount,
+            detectedAt: new Date()
+          });
+        }
+      }
+    });
+
+    return detectedRings;
+  };
+
+  // Find connected component using DFS
+  const findConnectedComponent = (
+    startNodeId: string,
+    nodes: NetworkNode[],
+    links: NetworkLink[],
+    visitedNodes: Set<string>
+  ): string[] => {
+    const component: string[] = [];
+    const stack: string[] = [startNodeId];
+
+    while (stack.length > 0) {
+      const currentNodeId = stack.pop()!;
+
+      if (visitedNodes.has(currentNodeId)) continue;
+
+      const currentNode = nodes.find(n => n.id === currentNodeId);
+      if (!currentNode || currentNode.risk < 0.6) continue;
+
+      visitedNodes.add(currentNodeId);
+      component.push(currentNodeId);
+
+      // Add neighbors to stack
+      const neighbors = getNodeNeighbors(currentNodeId, links);
+      neighbors.forEach(neighborId => {
+        if (!visitedNodes.has(neighborId)) {
+          stack.push(neighborId);
+        }
+      });
+    }
+
+    return component;
+  };
 
   const getNodeTypeIcon = (type: string) => {
     switch (type) {

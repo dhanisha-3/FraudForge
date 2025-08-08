@@ -134,15 +134,15 @@ const BehavioralBiometrics = () => {
     }
   }, [isTracking, handleMouseMove, handleKeyDown, handleKeyUp]);
 
-  // Analyze biometric data
+  // Advanced biometric analysis algorithm
   useEffect(() => {
     if (mouseData.length > 10 && keystrokeData.length > 5) {
-      // Simulate biometric analysis
-      const mousePattern = Math.min(95, 60 + (mouseData.length * 2));
-      const keystrokeRhythm = Math.min(98, 50 + (keystrokeData.length * 3));
-      const behavioralConsistency = Math.min(97, (mousePattern + keystrokeRhythm) / 2);
-      const overallMatch = Math.min(99, (mousePattern + keystrokeRhythm + biometricProfile.deviceFingerprint + behavioralConsistency) / 4);
-      
+      // Advanced mouse pattern analysis
+      const mousePattern = analyzeMousePattern(mouseData);
+      const keystrokeRhythm = analyzeKeystrokePattern(keystrokeData);
+      const behavioralConsistency = analyzeBehavioralConsistency(mouseData, keystrokeData);
+      const overallMatch = calculateOverallMatch(mousePattern, keystrokeRhythm, biometricProfile.deviceFingerprint, behavioralConsistency);
+
       setBiometricProfile(prev => ({
         ...prev,
         mousePattern,
@@ -151,16 +151,200 @@ const BehavioralBiometrics = () => {
         overallMatch
       }));
 
-      // Determine verification status
-      if (overallMatch > 90) {
+      // Determine verification status based on sophisticated thresholds
+      if (overallMatch > 85 && mousePattern > 80 && keystrokeRhythm > 80) {
         setVerificationStatus("verified");
-      } else if (overallMatch > 70) {
+      } else if (overallMatch > 60 && (mousePattern > 60 || keystrokeRhythm > 60)) {
         setVerificationStatus("analyzing");
       } else {
         setVerificationStatus("suspicious");
       }
     }
   }, [mouseData, keystrokeData, biometricProfile.deviceFingerprint]);
+
+  // Advanced mouse pattern analysis
+  const analyzeMousePattern = (data: MouseData[]): number => {
+    if (data.length < 5) return 0;
+
+    let score = 0;
+
+    // 1. Velocity consistency analysis
+    const velocities = data.map(d => d.velocity).filter(v => v > 0);
+    const avgVelocity = velocities.reduce((sum, v) => sum + v, 0) / velocities.length;
+    const velocityVariance = velocities.reduce((sum, v) => sum + Math.pow(v - avgVelocity, 2), 0) / velocities.length;
+    const velocityStdDev = Math.sqrt(velocityVariance);
+
+    // Human-like velocity patterns have moderate variance
+    if (velocityStdDev > 0.1 && velocityStdDev < 2.0) {
+      score += 25;
+    }
+
+    // 2. Acceleration pattern analysis
+    const accelerations = data.map(d => d.acceleration).filter(a => a > 0);
+    const avgAcceleration = accelerations.reduce((sum, a) => sum + a, 0) / accelerations.length;
+
+    // Human movements have natural acceleration patterns
+    if (avgAcceleration > 0.05 && avgAcceleration < 1.5) {
+      score += 20;
+    }
+
+    // 3. Movement smoothness (Jerk analysis)
+    let totalJerk = 0;
+    for (let i = 2; i < data.length; i++) {
+      const jerk = Math.abs(data[i].acceleration - 2 * data[i-1].acceleration + data[i-2].acceleration);
+      totalJerk += jerk;
+    }
+    const avgJerk = totalJerk / (data.length - 2);
+
+    // Human movements have controlled jerk
+    if (avgJerk < 0.5) {
+      score += 20;
+    }
+
+    // 4. Trajectory analysis
+    const distances = [];
+    for (let i = 1; i < data.length; i++) {
+      const distance = Math.sqrt(
+        Math.pow(data[i].x - data[i-1].x, 2) +
+        Math.pow(data[i].y - data[i-1].y, 2)
+      );
+      distances.push(distance);
+    }
+
+    const avgDistance = distances.reduce((sum, d) => sum + d, 0) / distances.length;
+    if (avgDistance > 5 && avgDistance < 50) {
+      score += 15;
+    }
+
+    // 5. Temporal consistency
+    const timeDiffs = [];
+    for (let i = 1; i < data.length; i++) {
+      timeDiffs.push(data[i].timestamp - data[i-1].timestamp);
+    }
+    const avgTimeDiff = timeDiffs.reduce((sum, t) => sum + t, 0) / timeDiffs.length;
+
+    // Human movements have consistent timing
+    if (avgTimeDiff > 10 && avgTimeDiff < 100) {
+      score += 20;
+    }
+
+    return Math.min(100, score);
+  };
+
+  // Advanced keystroke pattern analysis
+  const analyzeKeystrokePattern = (data: KeystrokeData[]): number => {
+    if (data.length < 3) return 0;
+
+    let score = 0;
+
+    // 1. Dwell time analysis
+    const dwellTimes = data.map(k => k.dwellTime).filter(d => d > 0);
+    const avgDwellTime = dwellTimes.reduce((sum, d) => sum + d, 0) / dwellTimes.length;
+    const dwellVariance = dwellTimes.reduce((sum, d) => sum + Math.pow(d - avgDwellTime, 2), 0) / dwellTimes.length;
+
+    // Human typing has characteristic dwell time patterns
+    if (avgDwellTime > 50 && avgDwellTime < 300) {
+      score += 25;
+    }
+
+    if (dwellVariance > 100 && dwellVariance < 10000) {
+      score += 20;
+    }
+
+    // 2. Flight time analysis
+    const flightTimes = data.map(k => k.flightTime).filter(f => f > 0);
+    const avgFlightTime = flightTimes.reduce((sum, f) => sum + f, 0) / flightTimes.length;
+
+    // Human inter-key intervals
+    if (avgFlightTime > 100 && avgFlightTime < 500) {
+      score += 25;
+    }
+
+    // 3. Typing rhythm consistency
+    const rhythmScores = [];
+    for (let i = 1; i < data.length; i++) {
+      const rhythm = data[i].dwellTime + data[i].flightTime;
+      rhythmScores.push(rhythm);
+    }
+
+    const rhythmVariance = rhythmScores.reduce((sum, r, _, arr) => {
+      const avg = arr.reduce((s, v) => s + v, 0) / arr.length;
+      return sum + Math.pow(r - avg, 2);
+    }, 0) / rhythmScores.length;
+
+    // Consistent rhythm indicates human typing
+    if (rhythmVariance > 1000 && rhythmVariance < 50000) {
+      score += 30;
+    }
+
+    return Math.min(100, score);
+  };
+
+  // Behavioral consistency analysis
+  const analyzeBehavioralConsistency = (mouseData: MouseData[], keystrokeData: KeystrokeData[]): number => {
+    let score = 0;
+
+    // 1. Cross-modal timing correlation
+    if (mouseData.length > 0 && keystrokeData.length > 0) {
+      const mouseTimestamps = mouseData.map(m => m.timestamp);
+      const keystrokeTimestamps = keystrokeData.map(k => k.timestamp);
+
+      // Check for realistic interaction patterns
+      const hasRealisticInteraction = mouseTimestamps.some(mt =>
+        keystrokeTimestamps.some(kt => Math.abs(mt - kt) < 5000)
+      );
+
+      if (hasRealisticInteraction) {
+        score += 30;
+      }
+    }
+
+    // 2. Activity level consistency
+    const mouseActivity = mouseData.length / (isTracking ? 1 : 0.1);
+    const keystrokeActivity = keystrokeData.length / (testInput.length || 1);
+
+    // Balanced activity indicates human behavior
+    if (mouseActivity > 5 && keystrokeActivity > 0.5) {
+      score += 35;
+    }
+
+    // 3. Temporal distribution
+    const allTimestamps = [
+      ...mouseData.map(m => m.timestamp),
+      ...keystrokeData.map(k => k.timestamp)
+    ].sort();
+
+    if (allTimestamps.length > 5) {
+      const timeSpan = allTimestamps[allTimestamps.length - 1] - allTimestamps[0];
+      const avgInterval = timeSpan / allTimestamps.length;
+
+      // Human interaction has natural temporal distribution
+      if (avgInterval > 100 && avgInterval < 2000) {
+        score += 35;
+      }
+    }
+
+    return Math.min(100, score);
+  };
+
+  // Calculate overall biometric match
+  const calculateOverallMatch = (mouse: number, keystroke: number, device: number, consistency: number): number => {
+    // Weighted scoring based on reliability of each metric
+    const weights = {
+      mouse: 0.3,
+      keystroke: 0.35,
+      device: 0.15,
+      consistency: 0.2
+    };
+
+    const weightedScore =
+      mouse * weights.mouse +
+      keystroke * weights.keystroke +
+      device * weights.device +
+      consistency * weights.consistency;
+
+    return Math.min(100, weightedScore);
+  };
 
   const startTracking = () => {
     setIsTracking(true);

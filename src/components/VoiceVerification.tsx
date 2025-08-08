@@ -114,22 +114,135 @@ const VoiceVerification = () => {
     };
   }, [isRecording]);
 
-  // Simulate voice analysis
+  // Advanced voice analysis simulation
   useEffect(() => {
     if (isRecording) {
       const interval = setInterval(() => {
-        setVoiceMetrics(prev => ({
-          pitch: Math.min(100, prev.pitch + Math.random() * 10),
-          tempo: Math.min(100, prev.tempo + Math.random() * 8),
-          clarity: Math.min(100, prev.clarity + Math.random() * 12),
-          authenticity: Math.min(100, prev.authenticity + Math.random() * 6),
-          match: Math.min(100, prev.match + Math.random() * 5)
-        }));
+        setVoiceMetrics(prev => {
+          const newMetrics = analyzeVoiceCharacteristics(prev);
+          return newMetrics;
+        });
       }, 200);
 
       return () => clearInterval(interval);
     }
   }, [isRecording]);
+
+  // Advanced voice characteristic analysis
+  const analyzeVoiceCharacteristics = (currentMetrics: VoiceMetrics): VoiceMetrics => {
+    // Simulate realistic voice analysis progression
+    const recordingDuration = Date.now() - (currentMetrics.pitch > 0 ? Date.now() - 3000 : Date.now());
+    const progress = Math.min(1, recordingDuration / 3000);
+
+    // 1. Pitch Analysis (Fundamental Frequency)
+    let pitchScore = currentMetrics.pitch;
+    if (progress > 0.2) {
+      // Simulate pitch stability analysis
+      const pitchStability = 85 + Math.random() * 10; // Human voices have stable pitch
+      const pitchRange = 75 + Math.random() * 20; // Natural pitch variation
+      pitchScore = Math.min(100, (pitchStability + pitchRange) / 2 * progress);
+    }
+
+    // 2. Tempo Analysis (Speech Rate)
+    let tempoScore = currentMetrics.tempo;
+    if (progress > 0.3) {
+      // Normal human speech rate: 150-160 words per minute
+      const speechRate = 80 + Math.random() * 15; // Consistent speech rate
+      const rhythmConsistency = 85 + Math.random() * 10; // Natural rhythm
+      tempoScore = Math.min(100, (speechRate + rhythmConsistency) / 2 * progress);
+    }
+
+    // 3. Clarity Analysis (Articulation and Pronunciation)
+    let clarityScore = currentMetrics.clarity;
+    if (progress > 0.4) {
+      // Phoneme recognition and articulation analysis
+      const articulation = 88 + Math.random() * 8; // Clear pronunciation
+      const noiseLevel = 90 - Math.random() * 15; // Background noise factor
+      clarityScore = Math.min(100, (articulation + noiseLevel) / 2 * progress);
+    }
+
+    // 4. Authenticity Analysis (Anti-spoofing)
+    let authenticityScore = currentMetrics.authenticity;
+    if (progress > 0.5) {
+      // Detect synthetic/recorded voice characteristics
+      const liveness = detectLiveness();
+      const spectralAnalysis = analyzeSpectralCharacteristics();
+      const temporalConsistency = analyzeTemporalConsistency();
+
+      authenticityScore = Math.min(100,
+        (liveness * 0.4 + spectralAnalysis * 0.35 + temporalConsistency * 0.25) * progress
+      );
+    }
+
+    // 5. Voice Match Analysis (Biometric Comparison)
+    let matchScore = currentMetrics.match;
+    if (progress > 0.6) {
+      // Compare with stored voice template
+      const voiceprintMatch = compareVoiceprint();
+      const behavioralMatch = analyzeSpeechBehavior();
+
+      matchScore = Math.min(100, (voiceprintMatch + behavioralMatch) / 2 * progress);
+    }
+
+    return {
+      pitch: pitchScore,
+      tempo: tempoScore,
+      clarity: clarityScore,
+      authenticity: authenticityScore,
+      match: matchScore
+    };
+  };
+
+  // Liveness detection (anti-spoofing)
+  const detectLiveness = (): number => {
+    // Simulate detection of live human speech vs recorded/synthetic
+    const microVariations = 85 + Math.random() * 10; // Natural micro-variations
+    const breathingPatterns = 80 + Math.random() * 15; // Natural breathing
+    const spontaneousElements = 75 + Math.random() * 20; // Spontaneous speech elements
+
+    return (microVariations + breathingPatterns + spontaneousElements) / 3;
+  };
+
+  // Spectral characteristics analysis
+  const analyzeSpectralCharacteristics = (): number => {
+    // Analyze frequency domain characteristics
+    const formantAnalysis = 88 + Math.random() * 8; // Formant frequencies
+    const harmonicStructure = 85 + Math.random() * 10; // Harmonic patterns
+    const spectralEnvelope = 82 + Math.random() * 12; // Overall spectral shape
+
+    return (formantAnalysis + harmonicStructure + spectralEnvelope) / 3;
+  };
+
+  // Temporal consistency analysis
+  const analyzeTemporalConsistency = (): number => {
+    // Analyze timing and rhythm patterns
+    const pausePatterns = 86 + Math.random() * 9; // Natural pause patterns
+    const stressPatterns = 84 + Math.random() * 11; // Word stress patterns
+    const intonationFlow = 87 + Math.random() * 8; // Intonation consistency
+
+    return (pausePatterns + stressPatterns + intonationFlow) / 3;
+  };
+
+  // Voiceprint comparison
+  const compareVoiceprint = (): number => {
+    // Simulate comparison with stored biometric template
+    const fundamentalFreq = 85 + Math.random() * 10; // F0 matching
+    const formantMatching = 88 + Math.random() * 8; // Formant pattern matching
+    const spectralMatching = 86 + Math.random() * 9; // Spectral envelope matching
+    const prosodyMatching = 84 + Math.random() * 11; // Prosodic pattern matching
+
+    return (fundamentalFreq + formantMatching + spectralMatching + prosodyMatching) / 4;
+  };
+
+  // Speech behavior analysis
+  const analyzeSpeechBehavior = (): number => {
+    // Analyze behavioral speech patterns
+    const speechRate = 87 + Math.random() * 8; // Consistent speech rate
+    const vocabularyUsage = 85 + Math.random() * 10; // Vocabulary patterns
+    const syntaxPatterns = 83 + Math.random() * 12; // Syntax consistency
+
+    return (speechRate + vocabularyUsage + syntaxPatterns) / 3;
+  };
 
   const startVerification = () => {
     setCurrentStep(0);
@@ -156,8 +269,7 @@ const VoiceVerification = () => {
   };
 
   const analyzeVoice = () => {
-    const currentStepData = verificationSteps[currentStep];
-    setVerificationSteps(prev => prev.map((step, index) => 
+    setVerificationSteps(prev => prev.map((step, index) =>
       index === currentStep ? { ...step, status: "analyzing" } : step
     ));
 
@@ -377,7 +489,7 @@ const VoiceVerification = () => {
             {/* Verification Steps */}
             <div className="space-y-3 mb-6">
               <h4 className="text-sm font-medium text-muted-foreground">Verification Progress</h4>
-              {verificationSteps.map((step, index) => (
+              {verificationSteps.map((step) => (
                 <div key={step.id} className="flex items-center justify-between p-3 bg-background/50 rounded-lg">
                   <div className="flex items-center space-x-3">
                     {React.createElement(getStatusIcon(step.status), { 
